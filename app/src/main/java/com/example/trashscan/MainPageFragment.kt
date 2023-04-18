@@ -1,59 +1,78 @@
 package com.example.trashscan
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.trashscan.databinding.FragmentMainPageBinding
+import com.example.trashscan.ml.Model
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.IOException
+import java.nio.ByteBuffer
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MainPageFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainPageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    lateinit var binding: FragmentMainPageBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_page, container, false)
+        binding = FragmentMainPageBinding.inflate(layoutInflater,container,false)
+        binding.ivPlus.setOnClickListener{
+            pickImage()
+        }
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainPageFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainPageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun pickImage() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 100 && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val imageBitmap = data.data!!
+            var bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageBitmap)
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap,150,150)
+            classifyImage(bitmap)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun classifyImage(bitmap: Bitmap?) {
+        try {
+            val model = Model.newInstance(requireContext())
+            // Creates inputs for reference.
+            val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 150, 150, 3), DataType.FLOAT32)
+            val tensorImage = TensorImage(DataType.FLOAT32)
+            tensorImage.load(bitmap)
+            val byteBuffer: ByteBuffer = tensorImage.buffer
+            inputFeature0.loadBuffer(byteBuffer)
+            // Runs model inference and gets result.
+            val outputs = model.process(inputFeature0)
+            val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+            Log.d("@@model res",outputFeature0.floatArray[0].toString())
+            // Releases model resources if no longer used.
+            model.close()
+            if(outputFeature0.floatArray[0].toInt() > .5) {
+                Toast.makeText(requireContext(),"recyclable", Toast.LENGTH_SHORT).show()
             }
+            else
+                Toast.makeText(requireContext(),"organic", Toast.LENGTH_SHORT).show()
+        }catch (e: IOException){
+            Log.d("@@model error",e.toString())
+        }
+
     }
 }

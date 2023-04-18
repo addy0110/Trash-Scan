@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainPageFragment">
+    tools:context=".MainPageFragment"
+    android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
+        android:id="@+id/ivPlus"
+        android:padding="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:src="@drawable/vector_plus"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tap anywhere to open a photo"
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center"
+        android:textColor="@color/black"/>
 </FrameLayout>
+</layout>
