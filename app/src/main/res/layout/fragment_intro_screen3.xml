@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IntroScreen3Fragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".IntroScreen3Fragment"
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/ivRecycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="128dp"
+        android:src="@drawable/vector_recycle"/>
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tvRecycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="RECYCLE"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@id/ivRecycle"/>
+    <TextView
+        android:textColor="@color/black"
+        android:layout_width="250dp"
+        android:gravity="center"
+        android:layout_marginTop="18dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="18dp"
+        app:layout_constraintTop_toBottomOf="@id/tvRecycle"
+        android:text="Your waste can be converted into new material. Dumb it into recycling bin."/>
+    <ImageButton
+        android:id="@+id/btRecycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/vector_triangle_button_green"
+        android:layout_marginBottom="18dp"/>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
