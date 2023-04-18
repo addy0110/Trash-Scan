@@ -1,59 +1,35 @@
 package com.example.trashscan
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
+import com.example.trashscan.databinding.FragmentResultPageBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ResultPageFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ResultPageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var binding: FragmentResultPageBinding
+    private val args: ResultPageFragmentArgs by navArgs<ResultPageFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result_page, container, false)
+        binding = FragmentResultPageBinding.inflate(layoutInflater,container,false)
+        val myData = args.myData
+        binding.ivWaste.setImageBitmap(myData.bitmap)
+        binding.tvWaste.setText(myData.result)
+        if(myData.result == "Organic"){
+            binding.tvWasteDetails.text = "Your waste is biodegradable and had come from either a plant or animal. It can be converted using useful fertilizer by composting. Dumb it into green or organic bin. "
+        }
+        else{
+            binding.tvWasteDetails.text = "Your waste can be converted into new material. Recycling it will recover the energy from your waste material. Dumb it into recycling bin."
+        }
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ResultPageFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ResultPageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

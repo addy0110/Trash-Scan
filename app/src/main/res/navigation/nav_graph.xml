@@ -47,5 +47,9 @@
         android:id="@+id/resultPageFragment"
         android:name="com.example.trashscan.ResultPageFragment"
         android:label="fragment_result_page"
-        tools:layout="@layout/fragment_result_page" />
+        tools:layout="@layout/fragment_result_page">
+        <argument
+            android:name="myData"
+            app:argType="com.example.trashscan.MyData" />
+    </fragment>
 </navigation>

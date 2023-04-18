@@ -15,11 +15,35 @@
         android:layout_height="match_parent"
         android:src="@drawable/vector_plus"/>
     <TextView
+        android:fontFamily="@font/poppins_regular"
+        android:id="@+id/tvTap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tap anywhere to open a photo"
         android:layout_marginTop="150dp"
         android:layout_gravity="center"
         android:textColor="@color/black"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_gravity="center"
+            android:id="@+id/pbProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/progressBar"/>
+        <TextView
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:id="@+id/tvRunningModel"
+            android:text="Running model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 </FrameLayout>
 </layout>

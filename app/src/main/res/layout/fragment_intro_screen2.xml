@@ -29,6 +29,7 @@
         android:textStyle="bold"
         android:textSize="24dp"
         android:layout_marginTop="18dp"
+        android:fontFamily="@font/poppins_semibold"
         app:layout_constraintTop_toBottomOf="@id/ivReuse"/>
     <TextView
         android:textColor="@color/black"
@@ -39,6 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="18dp"
+        android:fontFamily="@font/poppins_extralight"
         app:layout_constraintTop_toBottomOf="@id/tvReuse"
         android:text="Donate broken appliances to charity or buy beverages in returnable containers. Reuse the material instead of throwing."/>
     <ImageButton

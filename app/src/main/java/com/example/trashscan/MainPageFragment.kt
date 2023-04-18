@@ -3,8 +3,12 @@ package com.example.trashscan
 import android.content.Intent
 import android.graphics.Bitmap
 import android.media.ThumbnailUtils
+import android.opengl.Visibility
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
+import android.text.Layout.Directions
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.example.trashscan.databinding.FragmentMainPageBinding
 import com.example.trashscan.ml.Model
 import org.tensorflow.lite.DataType
@@ -28,6 +33,8 @@ class MainPageFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentMainPageBinding.inflate(layoutInflater,container,false)
+        binding.pbProgressBar.visibility = View.GONE
+        binding.tvRunningModel.visibility = View.GONE
         binding.ivPlus.setOnClickListener{
             pickImage()
         }
@@ -65,11 +72,28 @@ class MainPageFragment : Fragment() {
             Log.d("@@model res",outputFeature0.floatArray[0].toString())
             // Releases model resources if no longer used.
             model.close()
+            binding.ivPlus.visibility = View.GONE
+            binding.tvTap.visibility = View.GONE
+            binding.pbProgressBar.visibility = View.VISIBLE
+            binding.tvRunningModel.visibility = View.VISIBLE
+
             if(outputFeature0.floatArray[0].toInt() > .5) {
-                Toast.makeText(requireContext(),"recyclable", Toast.LENGTH_SHORT).show()
+                val myData = MyData(bitmap!!,"Recyclable")
+                val action = MainPageFragmentDirections.actionMainPageFragmentToResultPageFragment(myData)
+                Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                    findNavController().navigate(action)
+                }, 1000)
+//                Toast.makeText(requireContext(),"Recyclable", Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(requireContext(),"organic", Toast.LENGTH_SHORT).show()
+            else {
+                val myData = MyData(bitmap!!,"Organic")
+                val action = MainPageFragmentDirections.actionMainPageFragmentToResultPageFragment(myData)
+                Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                    findNavController().navigate(action)
+                }, 1000)
+//                Toast.makeText(requireContext(), "Organic", Toast.LENGTH_SHORT).show()
+            }
+
         }catch (e: IOException){
             Log.d("@@model error",e.toString())
         }
